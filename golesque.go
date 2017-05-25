@@ -154,7 +154,7 @@ func Dump(code []byte) error {
 
 			slice = slice[2:]
 
-			name, ok := OpNames[(uint32(uint32(c2)<<8))]
+			name, ok := OpNames[(uint32(uint32(c2) << 8))]
 
 			if !ok {
 				fmt.Println("n/a")
@@ -172,7 +172,6 @@ func Dump(code []byte) error {
 			c3 := slice[2]
 
 			slice = slice[3:]
-
 
 			name, ok := OpNames[uint32(uint32(c2)<<24|uint32(c3)<<16)]
 
@@ -195,7 +194,7 @@ func Dump(code []byte) error {
 
 		case 0x04:
 			// Push 32bit int
-			
+
 			if len(slice) < 5 {
 				return ErrInvEOF
 			}
@@ -205,13 +204,12 @@ func Dump(code []byte) error {
 			c4 := slice[3]
 			c5 := slice[4]
 
-			i := uint32(uint32(c5) << 24 | uint32(c4) << 16 | uint32(c3) << 8 | uint32(c2))
-
+			i := uint32(uint32(c5)<<24 | uint32(c4)<<16 | uint32(c3)<<8 | uint32(c2))
 
 			var si int32 = 0
 
-			if i & 0x80000000 != 0 {
-				si = -1 * int32(i & 0x7FFFFFFF)
+			if i&0x80000000 != 0 {
+				si = -1 * int32(i&0x7FFFFFFF)
 			} else {
 				si = int32(i & 0x7FFFFFFF)
 			}
@@ -280,7 +278,7 @@ func Run(code []byte, context *GLSQContext) error {
 		case 0x02:
 			// Push constant false
 			context.PushBool(false)
-			
+
 			slice = slice[1:]
 
 		case 0x03:
@@ -291,7 +289,7 @@ func Run(code []byte, context *GLSQContext) error {
 
 		case 0x04:
 			// Push 32bit int
-			
+
 			if len(slice) < 5 {
 				return ErrInvEOF
 			}
@@ -301,13 +299,12 @@ func Run(code []byte, context *GLSQContext) error {
 			c4 := slice[3]
 			c5 := slice[4]
 
-			i := uint32(uint32(c5) << 24 | uint32(c4) << 16 | uint32(c3) << 8 | uint32(c2))
-
+			i := uint32(uint32(c5)<<24 | uint32(c4)<<16 | uint32(c3)<<8 | uint32(c2))
 
 			var si int32 = 0
 
-			if i & 0x80000000 != 0 {
-				si = -1 * int32(i & 0x7FFFFFFF)
+			if i&0x80000000 != 0 {
+				si = -1 * int32(i&0x7FFFFFFF)
 			} else {
 				si = int32(i & 0x7FFFFFFF)
 			}
@@ -334,7 +331,7 @@ var ops map[uint32](func(*GLSQContext) error) = map[uint32](func(*GLSQContext) e
 	0xFFFF0000: Op_Assert_True,
 }
 
-var OpNames map[uint32]string = map[uint32]string {
+var OpNames map[uint32]string = map[uint32]string{
 	0x00000009: "equ",
 	0x00000010: "add",
 	0xFFFF0000: "assert_true",
@@ -348,119 +345,4 @@ func op(opc uint32, context *GLSQContext) error {
 	}
 
 	return opf(context)
-}
-
-// 0x01FFFF - assert_true
-func Op_Assert_True(context *GLSQContext) error {
-	a, err := context.PopBool()
-
-	if err != nil {
-		return err
-	}
-
-	if a.GlsqBool != true {
-		return ErrAssertionFailed
-	}
-
-	return nil
-}
-
-func boolToInt(value bool) int {
-	if value {
-		return 1
-	} else {
-		return 0
-	}
-}
-
-func intToBool(value int) bool {
-	if value == 0 {
-		return false
-	} else {
-		return true
-	}
-}
-
-
-// 0x10 - add
-func Op_Add(context *GLSQContext) error {
-	a, b, err := context.PopTwo()
-
-	if err != nil {
-		return err
-	}
-
-	switch a.GlsqType {
-	case GLSQ_TYPE_INT:
-		switch b.GlsqType {
-		case GLSQ_TYPE_INT:
-			context.PushInt(a.GlsqInt + b.GlsqInt)
-
-		default:
-			return ErrInvInputTypes
-		}
-
-	case GLSQ_TYPE_FLOAT:
-		switch b.GlsqType {
-		case GLSQ_TYPE_FLOAT:
-			context.PushFloat(a.GlsqFloat + b.GlsqFloat)
-		}
-
-	case GLSQ_TYPE_BOOL:
-		switch b.GlsqType {
-		case GLSQ_TYPE_BOOL:
-			a_i := boolToInt(a.GlsqBool)
-			b_i := boolToInt(b.GlsqBool)
-			c_i := (a_i + b_i) % 2
-
-			context.PushBool(intToBool(c_i))
-		}
-
-	default:
-		return ErrInvInputTypes
-	}
-
-	return nil
-}
-
-
-// 0x09 - equ
-func Op_Equ(context *GLSQContext) error {
-	a, b, err := context.PopTwo()
-
-	if err != nil {
-		return err
-	}
-
-	if a.GlsqType != b.GlsqType {
-		context.PushBool(false)
-		return nil
-	}
-
-	switch a.GlsqType {
-	case GLSQ_TYPE_INT:
-		if a.GlsqInt != b.GlsqInt {
-			context.PushBool(false)
-			return nil
-		}
-
-	case GLSQ_TYPE_FLOAT:
-		if a.GlsqFloat != b.GlsqFloat {
-			context.PushBool(false)
-			return nil
-		}
-
-	case GLSQ_TYPE_BOOL:
-		if a.GlsqBool != b.GlsqBool {
-			context.PushBool(false)
-			return nil
-		}
-
-	default:
-		context.PushBool(false)
-		return nil
-	}
-
-	context.PushBool(true)
-	return nil
 }

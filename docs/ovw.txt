@@ -5,7 +5,7 @@
 
 1 add      sub      mul      div      xor      and      or       map      filter   reduce   take     drop     explode  implode  reverse  length
 
-2
+2 min      max
 
 3
 

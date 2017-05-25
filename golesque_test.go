@@ -3,10 +3,10 @@ package golesque_test
 import (
 	. "golesque"
 
+	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"io/ioutil"
-	"fmt"
 )
 
 var _ = Describe("Golesque", func() {
@@ -14,8 +14,8 @@ var _ = Describe("Golesque", func() {
 		It("Can run tests", func() {
 			files, _ := ioutil.ReadDir("./bintests")
 			for _, f := range files {
-				fmt.Printf("[%s]\n",f.Name())
-            	data, err := ioutil.ReadFile("./bintests/" + f.Name())
+				fmt.Printf("[%s]\n", f.Name())
+				data, err := ioutil.ReadFile("./bintests/" + f.Name())
 
 				if err != nil {
 					fmt.Println(err.Error())
@@ -36,6 +36,5 @@ var _ = Describe("Golesque", func() {
 			}
 		})
 
-		
 	})
 })
