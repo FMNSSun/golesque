@@ -6,6 +6,7 @@ import "container/list"
 // at the front and at the back to allow for append and prepend without too
 // much reallocation and copying. Of course, once the space at the back or
 // at the front is exceeded reallocation and copying becomes necessary.
+// Mostly used when fast random access is needed. May be used as a list too.
 type Buffer struct {
 	buf        []*GLSQObj
 	startIndex int // where is the start?
