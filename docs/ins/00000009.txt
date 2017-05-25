@@ -1,0 +1,8 @@
+NAME
+equ
+
+TYPE	equ
+a ANY, b ANY; bool
+
+Returns true if a equals b. No type conversion is attempted. If the types of a and b do not
+match the result will be false. 

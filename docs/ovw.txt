@@ -1,0 +1,41 @@
+[SET 0] 
+
+  0        1        2        3        4        5        6        7        8        9        A        B        C        D        E        F
+0 (set 1)  (set 2)  ldc.b.f  ldc.b.t  ldc.i.4  ldc.i.1  ldc.i.2  ldc.i.8  ldc.f.4  equ      nequ     leq      geq      lt       gt       
+
+1 add      sub      mul      div      xor      and      or       map      filter   reduce   take     drop     explode  implode  reverse  length
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+A
+
+B
+
+C
+
+D
+
+E pop      dup      swap     rotl     rotr     rev      collect  collectr pushall  pushallr pick     movup    movdwn
+
+F jmp      call     jmpif    callif   jmpn     calln    jmpneg   jmppos   callneg  callpos  ret      ldloc    stloc
+
+[SET 1] 
+
+
+[SET 2] 
+
+FFFF        assert_true

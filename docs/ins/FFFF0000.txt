@@ -1,0 +1,7 @@
+NAME
+assert_true
+
+TYPE	assert_true
+a bool
+
+Throws an error when a is not true. Mostly used in testcases. 

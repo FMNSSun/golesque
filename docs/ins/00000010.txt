@@ -1,0 +1,20 @@
+NAME
+add
+
+SYNS
+add bxor
+
+TYPE	add
+a int, b int; int
+
+Performs integer addition.
+
+TYPE	add
+a float, b float; float
+
+Performs floating point addition.
+
+TYPE	bxor
+a bool, b bool; bool
+
+Performs logical xor.
